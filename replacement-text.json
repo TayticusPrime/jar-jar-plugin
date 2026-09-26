@@ -1,0 +1,18 @@
+[
+  {
+    "target": "me",
+    "replacement": "me-sah"
+  },
+  {
+    "target": "i",
+    "replacement": "me-sah"
+  },
+  {
+    "target": "ok",
+    "replacement": "okiday"
+  },
+  {
+    "target": "bad",
+    "replacement": "bombad"
+  }
+]
