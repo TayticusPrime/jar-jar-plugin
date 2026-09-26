@@ -14,17 +14,28 @@
     }
   },
 
+  "permissions": ["tabs"],
+
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["binksify.js"],
+      "js": ["main.js"],
       "run_at": "document_start"
     }
   ],
 
+  "background": {
+    "scripts": ["scheduler.js"]
+  },
+
   "web_accessible_resources": [
     {
-      "resources": ["replacement-text.json"],
+      "resources": [
+        "config/config.json",
+        "config/replacement-text.json",
+        "assets/audio/manifest.json",
+        "assets/audio/*.mp3"
+      ],
       "matches": ["<all_urls>"]
     }
   ]

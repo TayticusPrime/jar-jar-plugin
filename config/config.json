@@ -1,0 +1,5 @@
+{
+  "text_replace_probability": 0.25,
+  "audio_play_probability": 0.25,
+  "scheduler_period_ms": 1000
+}
