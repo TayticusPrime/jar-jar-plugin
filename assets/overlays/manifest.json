@@ -1,0 +1,27 @@
+[
+  {
+    "image": "./face.png",
+    "animation": "fade",
+    "size": 0.2,
+    "x_position": "right",
+    "y_position": "bottom",
+    "in_out_duration": 1500,
+    "dwell_duration": 3000
+  },
+  {
+    "image": "./taunt.png",
+    "animation": "pan_in",
+    "size": 0.25,
+    "max_height": 0.6,
+    "in_out_duration": 1500,
+    "dwell_duration": 1500
+  },
+  {
+    "image": "./thumbs_up.png",
+    "animation": "pan_in",
+    "size": 0.4,
+    "max_height": 0.8,
+    "in_out_duration": 1500,
+    "dwell_duration": 1500
+  }
+]

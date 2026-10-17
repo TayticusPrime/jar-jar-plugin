@@ -1,7 +1,20 @@
 {
   "debug": true,
-  "text_replace_probability": 0.2,
-  "image_replace_probability": 0.1,
-  "audio_play_probability": 0.1,
+  "text_replacement": {
+    "enabled": true,
+    "text_replace_probability": 0.3
+  },
+  "image_replacement": {
+    "enabled": true,
+    "image_replace_probability": 0.1
+  },
+  "audio": {
+    "enabled": true,
+    "audio_play_probability": 0.05
+  },
+  "overlays": {
+    "enabled": true,
+    "overlay_probability": 0.05
+  },
   "scheduler_period_ms": 1000
 }

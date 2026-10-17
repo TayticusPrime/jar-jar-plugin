@@ -32,6 +32,8 @@
         "config/replacement-text.json",
         "assets/images/manifest.json",
         "assets/images/*",
+        "assets/overlays/manifest.json",
+        "assets/overlays/*",
         "assets/audio/manifest.json",
         "assets/audio/*.mp3"
       ],
