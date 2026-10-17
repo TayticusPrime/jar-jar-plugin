@@ -1,23 +1,23 @@
 [
   {
     "targets": ["me"],
-    "replacement": "me-sah"
+    "replacement": "mesa"
   },
   {
     "targets": ["my"],
-    "replacement": "me-sah's"
+    "replacement": "mesa's"
   },
   {
     "targets": ["i"],
-    "replacement": "me-sah"
+    "replacement": "mesa"
   },
   {
     "targets": ["you"],
-    "replacement": "you-sah"
+    "replacement": "yousa"
   },
   {
     "targets": ["your"],
-    "replacement": "you-sah's"
+    "replacement": "yousa's"
   },
   {
     "targets": ["ok"],
@@ -29,11 +29,15 @@
   },
   {
     "targets": ["the"],
-    "replacement": "dee"
+    "replacement": "da"
   },
   {
     "targets": ["these", "this"],
-    "replacement": "dee-sah"
+    "replacement": "deesa"
+  },
+  {
+    "targets": ["what"],
+    "replacement": "wassa"
   },
   {
     "targets": ["bad"],
@@ -49,10 +53,10 @@
   },
   {
     "targets": ["stink"],
-    "replacement": "stinkawits"
+    "replacement": "stinkawiff"
   },
   {
     "targets": ["die", "death"],
-    "replacement": "die (you-sah say die?)"
+    "replacement": "die (yousa say die?)"
   }
 ]

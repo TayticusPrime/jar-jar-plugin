@@ -5,6 +5,7 @@ const appName = "Jar-Jar Binksify";
 const configPath = "config/config.json";
 const replacementStringsPath = "config/replacement-text.json";
 const audioManifest = "assets/audio/manifest.json";
+const imageManifest = "assets/images/manifest.json";
 
 let browserAudioAvailable = false;
 let audioPlayLock = false;
@@ -63,6 +64,49 @@ function runReplacements(replacements, config) {
 
     if (text !== node.nodeValue) node.nodeValue = text;
   }
+}
+
+// Image replacement -----------------------------------------------------------------------------
+function replaceImages(imageFiles, config) {
+  if (imageFiles.length === 0) return;
+
+  const processedImages = new WeakSet();
+  const replaceImage = (image) => {
+    if (processedImages.has(image)) return;
+    processedImages.add(image);
+
+    if (
+      !(
+        config.image_replace_probability >= 1.0 ||
+        Math.random() < config.image_replace_probability
+      )
+    ) {
+      return;
+    }
+
+    image.removeAttribute("srcset");
+    image
+      .closest("picture")
+      ?.querySelectorAll("source")
+      .forEach((source) => source.removeAttribute("srcset"));
+    image.src = browser.runtime.getURL(
+      `assets/images/${getRandomFile(imageFiles)}`,
+    );
+  };
+  const scanNode = (node) => {
+    if (node.nodeType !== Node.ELEMENT_NODE) return;
+    if (node.matches("img")) replaceImage(node);
+    node.querySelectorAll("img").forEach(replaceImage);
+  };
+
+  document.querySelectorAll("img").forEach(replaceImage);
+
+  const observer = new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      mutation.addedNodes.forEach(scanNode);
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
 }
 
 // Audio injection --------------------------------------------------------------------------------
@@ -135,6 +179,14 @@ async function main() {
       `${appName}: Failed to load and apply replacement text`,
       error,
     );
+  }
+
+  // Replace webpage images
+  try {
+    const imageFiles = await loadJSON(imageManifest);
+    replaceImages(imageFiles, config);
+  } catch (error) {
+    console.error(`${appName}: Failed to load and replace images`, error);
   }
 
   // Play Jar-Jar sound-clips

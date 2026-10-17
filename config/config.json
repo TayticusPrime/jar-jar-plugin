@@ -1,6 +1,7 @@
 {
   "debug": true,
-  "text_replace_probability": 1.0,
-  "audio_play_probability": 1.0,
+  "text_replace_probability": 0.2,
+  "image_replace_probability": 0.1,
+  "audio_play_probability": 0.1,
   "scheduler_period_ms": 1000
 }
