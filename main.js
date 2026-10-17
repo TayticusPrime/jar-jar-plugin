@@ -6,8 +6,8 @@ const configPath = "config/config.json";
 const replacementStringsPath = "config/replacement-text.json";
 const audioManifest = "assets/audio/manifest.json";
 
-let audioInitialized = false;
-let mediaLock = false;
+let browserAudioAvailable = false;
+let audioPlayLock = false;
 
 // Function declarations ==========================================================================
 async function loadJSON(path) {
@@ -27,12 +27,15 @@ function getRandomFile(files) {
   return files[Math.floor(Math.random() * files.length)];
 }
 
+// Text replacements ------------------------------------------------------------------------------
 function runReplacements(replacements, config) {
   // Precompile once
-  const compiled = replacements.map(({ target, replacement }) => ({
-    regex: new RegExp(`\\b${target}\\b`, "gi"),
-    replacement,
-  }));
+  const compiled = replacements.flatMap(({ targets, replacement }) =>
+    targets.map((target) => ({
+      regex: new RegExp(`\\b${target}\\b`, "gi"),
+      replacement,
+    })),
+  );
 
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
 
@@ -62,56 +65,52 @@ function runReplacements(replacements, config) {
   }
 }
 
-async function unlockAudio(audioFiles) {
-  if (!unlockAudio.initialized) {
-    unlockAudio.initialized = true;
-
-    const unlockAudioHandler = () => unlockAudio(audioFiles);
-
-    document.addEventListener("mousemove", unlockAudioHandler, { once: true });
-    document.addEventListener("click", unlockAudioHandler, { once: true });
-    document.addEventListener("keydown", unlockAudioHandler, { once: true });
-    document.addEventListener("scroll", unlockAudioHandler, { once: true });
-  } else {
-    if (audioInitialized) return;
-    audioInitialized = true;
-
-    const unlock = new Audio(
-      browser.runtime.getURL(`assets/audio/${audioFiles[0]}`),
-    );
-    unlock.volume = 0;
-    unlock
-      .play()
-      .then(() => {
-        unlock.pause();
-        unlock.currentTime = 0;
-        // console.log(`${appName}: Audio unlocked successfully`);
-      })
-      .catch((error) => {
-        console.error(`${appName}: Unlock play failed`, error);
-      });
-  }
+// Audio injection --------------------------------------------------------------------------------
+function scheduleAudio(audioFiles, config) {
+  setInterval(() => {
+    if (
+      document.hasFocus() &&
+      document.visibilityState === "visible" &&
+      (config.audio_play_probability >= 1.0 ||
+        Math.random() < config.audio_play_probability)
+    ) {
+      playRandomAudioClip(audioFiles, config.debug);
+    }
+  }, config.scheduler_period_ms);
 }
 
-function playRandomAudioClip(audioFiles) {
-  if (mediaLock) return;
+function playRandomAudioClip(audioFiles, debug) {
+  if (audioPlayLock) return;
 
   const file = getRandomFile(audioFiles);
   const audio = new Audio(browser.runtime.getURL(`assets/audio/${file}`));
 
-  mediaLock = true;
+  if (debug) {
+    console.debug(
+      `playing audio "${file}", browser audio availability: ${browserAudioAvailable}`,
+    );
+  }
 
-  audio.play().catch((error) => {
-    console.error(`${appName}: Failed to play audio clip`, error);
-    mediaLock = false;
-  });
+  audioPlayLock = true;
+
+  audio
+    .play()
+    .then(() => {
+      if (!browserAudioAvailable) {
+        browserAudioAvailable = true;
+        console.info(`${appName}: Audio unlocked`);
+      }
+    })
+    .catch(() => {
+      audioPlayLock = false;
+    });
 
   audio.addEventListener("ended", () => {
-    mediaLock = false;
+    audioPlayLock = false;
   });
 
   audio.addEventListener("error", () => {
-    mediaLock = false;
+    audioPlayLock = false;
   });
 }
 
@@ -140,21 +139,8 @@ async function main() {
 
   // Play Jar-Jar sound-clips
   try {
-    // Prime audio
     const audioFiles = await loadJSON(audioManifest);
-    unlockAudio(audioFiles);
-
-    // Attach to scheduler
-    browser.runtime.onMessage.addListener((message) => {
-      if (
-        message.type === "tick" &&
-        document.hasFocus() &&
-        (config.audio_play_probability >= 1.0 ||
-          Math.random() < config.audio_play_probability)
-      ) {
-        playRandomAudioClip(audioFiles);
-      }
-    });
+    scheduleAudio(audioFiles, config);
   } catch (error) {
     console.error(`${appName}: Failed to launch audio player`, error);
   }

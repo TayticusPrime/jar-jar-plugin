@@ -1,18 +1,58 @@
 [
   {
-    "target": "me",
+    "targets": ["me"],
     "replacement": "me-sah"
   },
   {
-    "target": "i",
+    "targets": ["my"],
+    "replacement": "me-sah's"
+  },
+  {
+    "targets": ["i"],
     "replacement": "me-sah"
   },
   {
-    "target": "ok",
+    "targets": ["you"],
+    "replacement": "you-sah"
+  },
+  {
+    "targets": ["your"],
+    "replacement": "you-sah's"
+  },
+  {
+    "targets": ["ok"],
     "replacement": "okiday"
   },
   {
-    "target": "bad",
+    "targets": ["that"],
+    "replacement": "dat"
+  },
+  {
+    "targets": ["the"],
+    "replacement": "dee"
+  },
+  {
+    "targets": ["these", "this"],
+    "replacement": "dee-sah"
+  },
+  {
+    "targets": ["bad"],
     "replacement": "bombad"
+  },
+  {
+    "targets": ["very"],
+    "replacement": "bery, bery"
+  },
+  {
+    "targets": ["much", "lots", "many"],
+    "replacement": "mouy mouy"
+  },
+  {
+    "targets": ["stink"],
+    "replacement": "stinkawits"
+  },
+  {
+    "targets": ["die", "death"],
+    "replacement": "die (you-sah say die?)"
   }
 ]

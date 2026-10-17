@@ -14,19 +14,16 @@
     }
   },
 
-  "permissions": ["tabs"],
-
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["main.js"],
+      "js": [
+        "node_modules/webextension-polyfill/dist/browser-polyfill.js",
+        "main.js"
+      ],
       "run_at": "document_start"
     }
   ],
-
-  "background": {
-    "scripts": ["scheduler.js"]
-  },
 
   "web_accessible_resources": [
     {
